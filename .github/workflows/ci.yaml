@@ -57,7 +57,8 @@ jobs:
 
           curl -fSL "$url" -o "$deb"
 
-          dpkg -i "$deb"
+          id
+          sudo dpkg -i "$deb"
 
           prismatik --nogui &
           sleep 5
