@@ -37,7 +37,7 @@ jobs:
           # find first .deb asset
           dotdeb = next(a for a in data['assets'] if a['name'].endswith('.deb'))
 
-          prev_date = dt.datetime.today() - dt.timedelta(hours = $hour_interval)
+          prev_date = dt.datetime.today() - dt.timedelta(hours = $PRISMATIK_VERISON_FILE)
           is_new = dt.datetime.strptime(dotdeb['updated_at'], '%Y-%m-%dT%H:%M:%SZ') > prev_date
 
           print(f"{data['tag_name']} {int(is_new)} {dotdeb['browser_download_url']}")
