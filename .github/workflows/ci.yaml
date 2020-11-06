@@ -44,7 +44,7 @@ jobs:
 
           EOF
 
-          python /dev/shm/pfetch.py
+          python /dev/shm/pfetch.py > "$PRISMATIK_VERISON_FILE"
 
           version=`cat "$PRISMATIK_VERISON_FILE" | cut -d' ' -f 1`
           is_new=`cat "$PRISMATIK_VERISON_FILE" | cut -d' ' -f 2`
