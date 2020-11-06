@@ -27,7 +27,7 @@ jobs:
           # 5.11.2.x 1 https://....deb
           rm -rf "$PRISMATIK_VERISON_FILE"
 
-          cat << EOF | python -- > "$PRISMATIK_VERISON_FILE"
+          cat << EOF > /dev/shm/pfetch.py
           import datetime as dt
           import json
 
@@ -43,6 +43,8 @@ jobs:
           print(f"{data['tag_name']} {int(is_new)} {dotdeb['browser_download_url']}")
 
           EOF
+
+          python /dev/shm/pfetch.py
 
           version=`cat "$PRISMATIK_VERISON_FILE" | cut -d' ' -f 1`
           is_new=`cat "$PRISMATIK_VERISON_FILE" | cut -d' ' -f 2`
