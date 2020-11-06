@@ -57,8 +57,8 @@ jobs:
 
           curl -fSL "$url" -o "$deb"
 
-          sudo apt update
-          sudo apt dist-upgrade -y
+          # sudo apt update
+          # sudo apt dist-upgrade -y
           sudo apt install -y \
           libfftw3-dev \
           libgtk2.0-dev \
