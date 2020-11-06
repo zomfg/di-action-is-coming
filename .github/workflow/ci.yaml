@@ -1,0 +1,64 @@
+name: Test vs latest HASS/Prismatik
+
+on:
+  push:
+    branches: [ hass_integration ]
+
+jobs:
+  linux_test:
+    runs-on: ubuntu-20.04
+    name: poopoo
+    timeout-minutes: 5
+    env:
+      HOURS_INTERVAL: 36
+      PRISMATIK_VERISON_FILE: /dev/shm/pver
+    steps:
+      - name: Get Latest Prismatik
+        run: |
+          set -xe
+
+          # get latest prismatik release
+          release_url='https://api.github.com/repos/psieg/Lightpack/releases/latest'
+          # release_url="file:///$(pwd)/prismatik_release_get.json"
+          dest=/dev/shm/prismatik_release.json
+          curl "$release_url" > "$dest"
+
+          # contains version, is_new flag, download url
+          # 5.11.2.x 1 https://....deb
+          rm -rf "$PRISMATIK_VERISON_FILE"
+
+          cat << EOF | python -- > "$PRISMATIK_VERISON_FILE"
+          import datetime as dt
+          import json
+
+          with open('$dest') as f:
+            data = json.load(f)
+
+          # find first .deb asset
+          dotdeb = next(a for a in data['assets'] if a['name'].endswith('.deb'))
+
+          prev_date = dt.datetime.today() - dt.timedelta(hours = $hour_interval)
+          is_new = dt.datetime.strptime(dotdeb['updated_at'], '%Y-%m-%dT%H:%M:%SZ') > prev_date
+
+          print(f"{data['tag_name']} {int(is_new)} {dotdeb['browser_download_url']}")
+
+          EOF
+
+          version=`cat "$PRISMATIK_VERISON_FILE" | cut -d' ' -f 1`
+          is_new=`cat "$PRISMATIK_VERISON_FILE" | cut -d' ' -f 2`
+          url=`cat "$PRISMATIK_VERISON_FILE" | cut -d' ' -f 3`
+          deb=/dev/shm/`basename "$url"`
+
+          echo $version
+          echo $is_new
+          echo $url
+
+          curl -fSL "$url" -o "$deb"
+
+          dpkg -i "$deb"
+
+          prismatik --nogui &
+          sleep 5
+          killall prismatik
+
+          ls -l ~/.Prismatik/
