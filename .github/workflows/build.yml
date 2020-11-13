@@ -15,13 +15,13 @@ jobs:
       - name: build
         run: |
           echo "this is some win build" > build.txt
-          zip --junk-paths build-win.zip build.txt
+          # zip --junk-paths build-win.zip build.txt
 
       - name: Upload Package
         uses: actions/upload-artifact@v2
         with:
-          name: build-win.zip
-          path: build-win.zip
+          name: build-win.txt
+          path: build-win.txt
 
   mac_build:
     name: mac build
@@ -30,13 +30,13 @@ jobs:
       - name: build
         run: |
           echo "this is some mac build" > build.txt
-          zip --junk-paths build-mac.zip build.txt
+          # zip --junk-paths build-mac.zip build.txt
 
       - name: Upload Package
         uses: actions/upload-artifact@v2
         with:
-          name: build-mac.zip
-          path: build-mac.zip
+          name: build-mac.txt
+          path: build-mac.txt
 
 
   dpkg_build:
@@ -53,18 +53,18 @@ jobs:
       - name: build
         run: |
           echo "this is some ubuntu ${{ matrix.os }} build" > build.txt
-          zip --junk-paths build-ubuntu-${{ matrix.os }}.zip build.txt
+          # zip --junk-paths build-ubuntu-${{ matrix.os }}.zip build.txt
 
       - name: Upload Package
         uses: actions/upload-artifact@v2
         with:
-          name: build-ubuntu-${{ matrix.os }}.zip
-          path: build-ubuntu-${{ matrix.os }}.zip
+          name: build-ubuntu-${{ matrix.os }}.txt
+          path: build-ubuntu-${{ matrix.os }}.txt
 
 
   pre_release:
     name: pre-release
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && startsWith(github.head_ref, 'hotfix/')
     # + if branch hotfix/* feature/*
     # github.event.pull_request.number
     # github.event.pull_request.title
@@ -77,20 +77,52 @@ jobs:
       - name: prereleasing
         run: |
           echo pre-release
+          echo ref/tag ${{ github.ref }}
           echo head_ref ${{ github.head_ref }}
           echo PR number ${{ github.event.pull_request.number }}
           echo PR title ${{ github.event.pull_request.title }}
+
       - name: download artifacts
         uses: actions/download-artifact@v2
+
       - name: list artifacts
         run: ls -l
-      # - name: Create Pre-Release
-      #   id: create_release
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ github.ref }}
-      #     release_name: Pre-release ${{ github.ref }}
-      #     draft: false
-      #     prerelease: true
+
+      - name: get version name
+        run: |
+          VERSION=5.11.2.26-pre`date +%Y%m%d`
+          echo "PR_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create Pre-Release
+        # if: ${{ never() }}
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.PR_VERSION }}
+          release_name: Pre-release ${{ env.PR_VERSION }}
+          body: '${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})'
+          draft: false
+          prerelease: true
+
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ASSET_URL: ${{ steps.create_release.outputs.upload_url }}
+        run: |
+          cat << EOF | python --
+          import mimetypes
+          import os
+          import requests
+
+          for f in os.listdir('.'):
+            with open(f, 'rb') as asset:
+              headers = {
+                'user-agent': os.environ['GITHUB_REPOSITORY'],
+                'authorization': f"token {os.environ['GITHUB_TOKEN']}",
+                'content-type': mimetypes.guess_type(f)[0],
+                'content-size': os.stat(f).st_size
+              }
+              requests.post(f"{os.environ['ASSET_URL']}?name={f}", headers=headers, files={f:asset})
+          EOF
