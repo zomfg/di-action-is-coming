@@ -1,0 +1,96 @@
+name: Build
+
+on:
+  push:
+    # branches: [ master ]
+    tags: [ '5.11.2.*' ] # release tag => create draft release, would pre-release tag trigger?
+  pull_request:
+    types: [ closed ] # not enough, have to check for merge
+
+jobs:
+  win_build:
+    name: windows build
+    runs-on: ubuntu-latest
+    steps:
+      - name: build
+        run: |
+          echo "this is some win build" > build.txt
+          zip --junk-paths build-win.zip build.txt
+
+      - name: Upload Package
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-win.zip
+          path: build-win.zip
+
+  mac_build:
+    name: mac build
+    runs-on: ubuntu-latest
+    steps:
+      - name: build
+        run: |
+          echo "this is some mac build" > build.txt
+          zip --junk-paths build-mac.zip build.txt
+
+      - name: Upload Package
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-mac.zip
+          path: build-mac.zip
+
+
+  dpkg_build:
+    name: ubuntu ${{ matrix.os }} build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:
+          - '18.04'
+          - '20.04'
+          - '20.10'
+
+    steps:
+      - name: build
+        run: |
+          echo "this is some ubuntu ${{ matrix.os }} build" > build.txt
+          zip --junk-paths build-ubuntu-${{ matrix.os }}.zip build.txt
+
+      - name: Upload Package
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-ubuntu-${{ matrix.os }}.zip
+          path: build-ubuntu-${{ matrix.os }}.zip
+
+
+  pre_release:
+    name: pre-release
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    # + if branch hotfix/* feature/*
+    # github.event.pull_request.number
+    # github.event.pull_request.title
+    runs-on: ubuntu-latest
+    needs:
+      - win_build
+      - mac_build
+      - dpkg_build
+    steps:
+      - name: prereleasing
+        run: |
+          echo pre-release
+          echo head_ref ${{ github.head_ref }}
+          echo PR number ${{ github.event.pull_request.number }}
+          echo PR title ${{ github.event.pull_request.title }}
+      - name: download artifacts
+        uses: actions/download-artifact@v2
+      - name: list artifacts
+        run: ls -l
+      # - name: Create Pre-Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ github.ref }}
+      #     release_name: Pre-release ${{ github.ref }}
+      #     draft: false
+      #     prerelease: true
