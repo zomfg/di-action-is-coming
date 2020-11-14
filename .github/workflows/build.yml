@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     # branches: [ master ]
-    tags: [ '5.11.2.*' ] # release tag => create draft release, would pre-release tag trigger?
+    tags: [ '5.11.2.*' ] # release tag => create draft release, would pre-release tag trigger? (no)
   pull_request:
     types: [ closed ] # not enough, have to check for merge
 
@@ -61,6 +61,55 @@ jobs:
           name: build-ubuntu-${{ matrix.os }}.txt
           path: build-ubuntu-${{ matrix.os }}.txt
 
+  release:
+    name: release on manual tag
+    if: github.event_name == 'push'
+    runs-on: ubuntu-20.04
+    needs:
+      - win_build
+      - mac_build
+      - dpkg_build
+
+    steps:
+      - name: download artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Create Release
+        # if: ${{ never() }}
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          # body: '${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})'
+          draft: true
+          prerelease: false
+
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ASSET_URL: ${{ steps.create_release.outputs.upload_url }}
+        run: |
+          cat << EOF | python --
+          import glob
+          import mimetypes
+          import os
+          import requests
+
+          for file in glob.iglob('**/*'):
+            with open(file, 'rb') as asset:
+              token=os.environ['GITHUB_TOKEN']
+              headers = {
+                'user-agent': os.environ['GITHUB_REPOSITORY'],
+                'authorization': "token " + token,
+                'content-type': mimetypes.guess_type(file)[0],
+                'content-size': str(os.stat(file).st_size)
+              }
+              url=os.environ['ASSET_URL'].replace('{?name,label}','')
+              requests.post(f"{url}?name={os.path.basename(file)}", headers=headers, data=asset)
+          EOF
 
   pre_release:
     name: pre-release
