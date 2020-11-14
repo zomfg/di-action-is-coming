@@ -90,7 +90,7 @@ jobs:
 
       - name: get version name
         run: |
-          VERSION=5.11.2.26-pre`date +%Y%m%d`
+          VERSION=5.11.2.26-pre`date +%Y%m%d%H%M%S`
           echo "PR_VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Create Pre-Release
@@ -118,11 +118,13 @@ jobs:
 
           for f in os.listdir('.'):
             with open(f, 'rb') as asset:
+              token=os.environ['GITHUB_TOKEN']
               headers = {
                 'user-agent': os.environ['GITHUB_REPOSITORY'],
-                'authorization': f"token {os.environ['GITHUB_TOKEN']}",
+                'authorization': f"token {token}",
                 'content-type': mimetypes.guess_type(f)[0],
                 'content-size': os.stat(f).st_size
               }
-              requests.post(f"{os.environ['ASSET_URL']}?name={f}", headers=headers, files={f:asset})
+              url=os.environ['ASSET_URL'].replace('{?name,label}','')
+              requests.post(f"{url}?name={f}", headers=headers, files={f:asset})
           EOF
