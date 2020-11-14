@@ -124,7 +124,7 @@ jobs:
                 'user-agent': os.environ['GITHUB_REPOSITORY'],
                 'authorization': "token " + token,
                 'content-type': mimetypes.guess_type(file)[0],
-                'content-size': os.stat(file).st_size
+                'content-size': str(os.stat(file).st_size)
               }
               url=os.environ['ASSET_URL'].replace('{?name,label}','')
               requests.post(url + "?name=" + file, headers=headers, files={file:asset})
