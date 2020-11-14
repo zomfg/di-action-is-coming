@@ -116,15 +116,15 @@ jobs:
           import os
           import requests
 
-          for f in os.listdir('.'):
-            with open(f, 'rb') as asset:
+          for file in os.listdir('.'):
+            with open(file, 'rb') as asset:
               token=os.environ['GITHUB_TOKEN']
               headers = {
                 'user-agent': os.environ['GITHUB_REPOSITORY'],
-                'authorization': f"token {token}",
-                'content-type': mimetypes.guess_type(f)[0],
-                'content-size': os.stat(f).st_size
+                'authorization': f'token {token}',
+                'content-type': mimetypes.guess_type(file)[0],
+                'content-size': os.stat(file).st_size
               }
               url=os.environ['ASSET_URL'].replace('{?name,label}','')
-              requests.post(f"{url}?name={f}", headers=headers, files={f:asset})
+              requests.post(f'{url}?name={file}', headers=headers, files={f:asset})
           EOF
