@@ -138,9 +138,32 @@ jobs:
         run: ls -l
 
       - name: get version name
+        env:
+          RELEASE_JSON: latest.json
         run: |
-          VERSION=5.11.2.26-pre`date +%Y%m%d%H%M%S`
-          echo "PR_VERSION=$VERSION" >> $GITHUB_ENV
+          curl -H "User-Agent: $GITHUB_REPOSITORY" "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/latest" > "$RELEASE_JSON"
+
+          cat << EOF | python -- >> $GITHUB_ENV
+          import datetime as dt
+          import json
+          import re
+
+          with open('$RELEASE_JSON') as f:
+            data = json.load(f)
+          print("last tag", data['tag_name'])
+          print("prerelease", data['prerelease'])
+
+          matches = re.compile('^(5\.11\.2)\.([0-9]+)').match(data['tag_name'])
+          if matches is None:
+            exit(1)
+
+          version = f"{matches.group(1)}.{int(matches.group(2)) + 1}"
+          if data['prerelease']:
+            version = matches.group(0)
+
+          print(f"PR_VERSION={version}-pre{dt.datetime.today().strftime('%Y%m%d%H%M%S')}")
+
+          EOF
 
       - name: Create Pre-Release
         # if: ${{ never() }}
