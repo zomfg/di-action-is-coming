@@ -126,5 +126,5 @@ jobs:
                 'content-size': os.stat(file).st_size
               }
               url=os.environ['ASSET_URL'].replace('{?name,label}','')
-              requests.post(f'{url}?name={file}', headers=headers, files={f:asset})
+              requests.post(url + "?name=" + file, headers=headers, files={f:asset})
           EOF
