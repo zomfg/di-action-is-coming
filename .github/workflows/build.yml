@@ -121,7 +121,7 @@ jobs:
               token=os.environ['GITHUB_TOKEN']
               headers = {
                 'user-agent': os.environ['GITHUB_REPOSITORY'],
-                'authorization': f'token {token}',
+                'authorization': "token " + token,
                 'content-type': mimetypes.guess_type(file)[0],
                 'content-size': os.stat(file).st_size
               }
