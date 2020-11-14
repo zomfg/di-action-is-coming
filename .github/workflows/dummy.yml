@@ -25,12 +25,12 @@ jobs:
 
       - name: Test multi env
         run: |
-        cat << EOF | python -- >> $GITHUB_ENV
+          cat << EOF | python -- >> $GITHUB_ENV
 
-        print('CUSTOM_VAR1=V1')
-        print('CUSTOM_VAR1=V2')
+          print('CUSTOM_VAR1=V1')
+          print('CUSTOM_VAR1=V2')
 
-        EOF
+          EOF
 
       - name: check env
         run: env
