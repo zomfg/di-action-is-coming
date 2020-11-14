@@ -68,7 +68,7 @@ jobs:
     # + if branch hotfix/* feature/*
     # github.event.pull_request.number
     # github.event.pull_request.title
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs:
       - win_build
       - mac_build
