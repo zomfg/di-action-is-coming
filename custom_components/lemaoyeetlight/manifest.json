@@ -1,0 +1,10 @@
+{
+  "domain": "prismatik",
+  "name": "Prismatik",
+  "config_flow": true,
+  "documentation": "https://github.com/zomfg/di-action-is-coming",
+  "codeowners": [
+    "@zomfg"
+  ]
+}
+
