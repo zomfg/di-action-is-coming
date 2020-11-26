@@ -1,0 +1,8 @@
+{
+    "name": "di action is coming",
+    "iot_class": "Local Polling",
+    "domains": ["light"],
+    "content_in_root": true,
+    "render_readme": true
+}
+
