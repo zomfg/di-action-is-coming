@@ -150,8 +150,6 @@ jobs:
 
           with open('$RELEASE_JSON') as f:
             data = json.load(f)
-          print("last tag", data['tag_name'])
-          print("prerelease", data['prerelease'])
 
           matches = re.compile('^(5\.11\.2)\.([0-9]+)').match(data['tag_name'])
           if matches is None:
