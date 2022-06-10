@@ -9,8 +9,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    env:
+      ASIS: ${{ secrets.DEEZ }}/nuts
+      DEF: ${{ secrets.DEEZ || 'ligma' }}/nuts
 
     steps:
+      - name: env test
+        run: |
+          echo $ASIS
+          echo $DEF
       - name: Run a one-line script
         run: echo Hello, World!
 
