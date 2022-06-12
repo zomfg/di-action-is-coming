@@ -12,7 +12,7 @@ jobs:
     env:
       ASIS: ${{ secrets.DEEZ }}/nuts
       DEF: ${{ secrets.DEEZ || 'ligma' }}/nuts
-      PUSH_TRUE: ${{ github.event_type == 'push' }}
+      PUSH_TRUE: ${{ github.event_name == 'push' }}
 
     steps:
       - name: env test
@@ -44,7 +44,9 @@ jobs:
           EOF
 
       - name: check env
+        if: env.PUSH_TRUE == true
         run: env
 
       - name: cat hotfix_crash.txt
+        if: env.PUSH_TRUE != true
         run: cat hotfix_crash.txt
