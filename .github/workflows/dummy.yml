@@ -44,9 +44,9 @@ jobs:
           EOF
 
       - name: check env
-        if: env.PUSH_TRUE == true
+        if: env.PUSH_TRUE == 'true'
         run: env
 
       - name: cat hotfix_crash.txt
-        if: env.PUSH_TRUE != true
+        if: env.PUSH_TRUE != 'true'
         run: cat hotfix_crash.txt
