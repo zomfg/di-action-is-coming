@@ -19,8 +19,8 @@ jobs:
         run: |
           echo $ASIS
           echo $DEF
-          echo "ENV_TRUE=${{ env.PUSH_TRUE }}" >> $GITHUB_ENV
-          echo "ENV_FALSE=${{ !env.PUSH_TRUE }}" >> $GITHUB_ENV
+          echo "ENV_TRUE=${{ fromJSON(env.PUSH_TRUE) }}" >> $GITHUB_ENV
+          echo "ENV_FALSE=${{ !fromJSON(env.PUSH_TRUE) }}" >> $GITHUB_ENV
       - name: Run a one-line script
         run: echo Hello, World!
 
