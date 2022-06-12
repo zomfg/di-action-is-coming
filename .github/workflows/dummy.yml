@@ -12,6 +12,9 @@ jobs:
     env:
       ASIS: ${{ secrets.DEEZ }}/nuts
       DEF: ${{ secrets.DEEZ || 'ligma' }}/nuts
+      PUSH_TRUE: ${{ github.event_type == 'push' }}
+      ENV_TRUE: ${{ env.PUSH_TRUE }}
+      ENV_FALSE: ${{ ! env.PUSH_TRUE }}
 
     steps:
       - name: env test
