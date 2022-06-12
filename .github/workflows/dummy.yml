@@ -21,11 +21,14 @@ jobs:
         run: |
           echo $ASIS
           echo $DEF
+          echo "ENV_TRUE=${{ env.PUSH_TRUE }}" >> $GITHUB_ENV
+          echo "ENV_FALSE=${{ !env.PUSH_TRUE }}" >> $GITHUB_ENV
       - name: Run a one-line script
         run: echo Hello, World!
 
       - name: branch name
         run: |
+          env
           echo ref ${{ github.ref }}
           echo head ${{ github.head_ref }}
           echo base ${{ github.base_ref }}
