@@ -43,6 +43,10 @@ jobs:
               cls.driver = webdriver.Firefox(options=ops)
               cls.driver.get("https://www.github.com")
               cls.driver.get_full_page_screenshot_as_file("deez_nuts.png")
+
+            def test_quickmaff(self):
+              self.assertEqual(2, 2)
+
             @classmethod
             def tearDownClass(cls):
               cls.driver.close()
