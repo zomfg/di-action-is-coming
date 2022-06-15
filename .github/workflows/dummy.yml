@@ -24,6 +24,37 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, World!
 
+      - name: run test
+        run: |
+          python3 <<EOF
+          import unittest
+          from selenium import webdriver
+          from selenium.webdriver.common.by import By
+          from selenium.webdriver.firefox.options import Options
+
+          class TestBdxInterface(unittest.TestCase):
+            @classmethod
+            def setUpClass(cls):
+              ops = Options()
+              ops.add_argument("--headless")
+              cls.driver = webdriver.Firefox(options=ops)
+              cls.driver.get("https://www.github.com")
+              cls.driver.get_full_page_screenshot_as_file("deez_nuts.png")
+            @classmethod
+            def tearDownClass(cls):
+              cls.driver.close()
+
+          if __name__ == '__main__':
+            unittest.main(verbosity=2)
+
+          EOF
+
+      - name: save screen
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-screen
+          path: deez_nuts.png
+
       - name: branch name
         run: |
           env
