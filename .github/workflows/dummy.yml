@@ -30,7 +30,7 @@ jobs:
           . venv/bin/activate
           pip install selenium pytest
           which pytest
-          pytest -v <<EOF
+          python3 <<EOF
           import unittest
 
           class TestDeezNuts(unittest.TestCase):
@@ -41,7 +41,7 @@ jobs:
               self.assertEqual(2, 3)
 
           if __name__ == '__main__':
-            unittest.main()
+            unittest.main(verbosity=2)
           EOF
 
           python3 <<EOF
