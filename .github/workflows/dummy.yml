@@ -30,7 +30,7 @@ jobs:
           . venv/bin/activate
           pip install selenium pytest
           which pytest
-          python3 <<EOF
+          python3 -m pytest <<EOF
           import unittest
 
           class TestDeezNuts(unittest.TestCase):
