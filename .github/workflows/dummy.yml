@@ -44,6 +44,7 @@ jobs:
               with self.subTest():
                 self.assertEqual(1,1)
                 self.assertEqual(1,2)
+                self.assertEqual(1,1)
             def test_ass(self):
               assert 1==1, 'ok'
               assert 1==2, 'ded'
