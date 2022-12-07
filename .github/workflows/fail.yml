@@ -3,8 +3,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  runs-on: ubuntu-latest
-  steps:
-    - name: should fail
-      run: |
-        echo "::setFailed::Deez nuts"
+  should-fail:
+    runs-on: ubuntu-latest
+    steps:
+      - name: should fail
+        run: |
+          echo "::setFailed::Deez nuts"
