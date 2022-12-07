@@ -6,6 +6,7 @@ jobs:
   should-fail:
     runs-on: ubuntu-latest
     steps:
-      - name: should fail
+      - name: step should fail
         run: |
-          echo "::setFailed::Deez nuts"
+          echo "::error ::Deez nuts"
+          exit 1
