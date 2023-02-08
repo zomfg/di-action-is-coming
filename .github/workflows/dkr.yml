@@ -26,7 +26,7 @@ jobs:
       - run: id
       - run: echo $TOKEN
         env:
-          TOKEN: ${{ secrets.SUPER_SECRET }}
+          TOKEN: ${{ secrets.UBER_SECRET }}
 
   build:
     runs-on: ubuntu-latest
