@@ -1,0 +1,23 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-on-dockerhub:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Docker Buildx
+        id: buildx_setup
+        uses: docker/setup-buildx-action@v2
+
+      - name: Non-push build only
+        uses: docker/build-push-action@v4
+        with:
+          push: false
+          load: true
+          context: client
+          file: docker/Dockerfile
+          builder: ${{ steps.buildx_setup.outputs.name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: testag
