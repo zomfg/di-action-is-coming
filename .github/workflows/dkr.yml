@@ -10,8 +10,8 @@ jobs:
       run:
         working-directory: client
     steps:
-      - run: echo "Running stuff"
       - uses: actions/checkout@v3
+      - run: echo "Running stuff"
       - uses: actions/setup-node@v3
         with:
           #node-version: '18'
