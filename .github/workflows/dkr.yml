@@ -22,6 +22,11 @@ jobs:
       - run: npx -v
       - run: npm clean-install
       - run: npm start
+      - run: pwd
+      - run: id
+      - run: echo $TOKEN
+        env:
+          TOKEN: ${{ secrets.SUPER_SECRET }}
 
   build:
     runs-on: ubuntu-latest
