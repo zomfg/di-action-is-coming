@@ -2,3 +2,6 @@
 .*
 
 !docker/Dockerfile
+!index.js
+!package-lock.json
+!package.json

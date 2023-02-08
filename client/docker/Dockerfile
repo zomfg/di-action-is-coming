@@ -1,6 +1,9 @@
-FROM alpine
+FROM node:18-alpine
 
-COPY . .
-ENV DEEZ=NUTS
+USER node
+WORKDIR /app
+COPY package*.json .
+RUN npm clean-install
+COPY index.js .
 
-RUN echo \$DEEZ
+ENTRYPOINT ["npm", "start"]

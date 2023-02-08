@@ -3,7 +3,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish-on-dockerhub:
+  test:
+    runs-on: ubuntu-latest
+    container: node:18-alpine@sha256:f8f6e351b184217e007918f27f821cb005a12826452cd6d7399920231a47ffac
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - run: echo "Running stuff"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          #node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+      - run: node -v
+      - run: npm -v
+      - run: npx -v
+      - run: npm clean-install
+      - run: npm start
+
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,3 +45,5 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: testag
+
+
