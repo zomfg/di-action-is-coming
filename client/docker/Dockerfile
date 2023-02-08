@@ -1,6 +1,6 @@
 FROM alpine
 
-COPY docker/Dockerfile .
+COPY . .
 ENV DEEZ=NUTS
 
 RUN echo \$DEEZ

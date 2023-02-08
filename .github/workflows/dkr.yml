@@ -16,7 +16,7 @@ jobs:
           push: false
           load: true
           context: client
-          file: docker/Dockerfile
+          file: client/docker/Dockerfile
           builder: ${{ steps.buildx_setup.outputs.name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
