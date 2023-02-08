@@ -21,9 +21,9 @@ jobs:
       - run: npm -v
       - run: npx -v
       - run: npm clean-install
-      - uses: szenius/set-timezone@v1.1
-        with:
-          timezoneLinux: "Europe/Paris"
+#      - uses: szenius/set-timezone@v1.1
+#        with:
+#          timezoneLinux: "Europe/Paris"
       - run: npm start
       - run: pwd
       - run: id
