@@ -14,7 +14,7 @@ jobs:
       - run: echo "Running stuff"
       - uses: actions/setup-node@v3
         with:
-          #node-version: '18'
+          node-version: '18'
           cache: 'npm'
           cache-dependency-path: client/package-lock.json
       - run: node -v
