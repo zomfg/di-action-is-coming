@@ -3,6 +3,6 @@
     "iot_class": "Local Polling",
     "domains": ["light", "prismatik"],
     "content_in_root": true,
-    "render_readme": true
+    "render_readme": false
 }
 
