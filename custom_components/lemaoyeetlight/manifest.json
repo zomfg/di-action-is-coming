@@ -1,6 +1,6 @@
 {
   "domain": "prismatik",
-  "name": "Prismatik OMG",
+  "name": "Prismatik",
   "config_flow": true,
   "documentation": "https://github.com/zomfg/di-action-is-coming",
   "codeowners": [
