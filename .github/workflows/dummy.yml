@@ -9,7 +9,7 @@ on:
   push:
     paths:
       - 'hacs.json'
-      - 'custom_components'
+      - 'custom_components/**'
     branches: [ master ]
 
 jobs:
