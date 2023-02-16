@@ -2,11 +2,14 @@ name: Dummy CI
 
 on:
   pull_request:
-    paths: &include_paths
-      - hacs.json
+    paths:
+      - 'hacs.json'
+      - 'custom_component'
     branches: [ master ]
   push:
-    paths: *include_paths
+    paths:
+      - 'hacs.json'
+      - 'custom_component'
     branches: [ master ]
 
 jobs:
