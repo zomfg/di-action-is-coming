@@ -4,12 +4,12 @@ on:
   pull_request:
     paths:
       - 'hacs.json'
-      - 'custom_component'
+      - 'custom_components'
     branches: [ master ]
   push:
     paths:
       - 'hacs.json'
-      - 'custom_component'
+      - 'custom_components'
     branches: [ master ]
 
 jobs:
