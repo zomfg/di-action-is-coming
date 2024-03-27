@@ -41,7 +41,7 @@ jobs:
         run: echo Hello, World!
 
       - name: Input test
-        run: echo beg ${{ inputs.brol != '' && inputs.brol || 'DEFAULT' }} end
+        run: echo beg ${{ inputs.brol != '' && format('--bill-tin={0}', inputs.brol) || 'DEFAULT' }} end
 
       - name: Input test 2
         run: echo beg ${{ github.events.inputs.brol && 'YE' || 'DEF' }} end
