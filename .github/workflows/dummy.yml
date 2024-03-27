@@ -11,6 +11,16 @@ on:
       - 'hacs.json'
       - 'custom_components/**'
     branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      brol:
+        description: 'eks dee'
+        required: true
+        type: choice
+        options:
+          - eks
+          - dee
+        default: dee
 
 jobs:
   build:
@@ -29,6 +39,9 @@ jobs:
           echo "ENV_FALSE=${{ !fromJSON(env.PUSH_TRUE) }}" >> $GITHUB_ENV
       - name: Run a one-line script
         run: echo Hello, World!
+
+      - name: Input test
+        run: echo beg ${{ inputs.brol }} end
 
       - name: run test
         run: |
