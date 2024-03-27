@@ -1,5 +1,5 @@
 {
-    "name": "di action is coming s",
+    "name": "di action is coming",
     "iot_class": "Local Polling",
     "domains": ["light", "prismatik"],
     "content_in_root": true,
