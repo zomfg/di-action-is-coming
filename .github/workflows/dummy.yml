@@ -43,6 +43,9 @@ jobs:
       - name: Input test
         run: echo beg ${{ inputs.brol }} end
 
+      - name: Input test 2
+        run: echo beg ${{ github.events.inputs.brol }} end
+
       - name: run test
         run: |
           python3 -m venv venv
