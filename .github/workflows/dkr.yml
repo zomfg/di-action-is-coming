@@ -36,14 +36,14 @@ jobs:
       - run: echo $TOKEN
         env:
           TOKEN: ${{ secrets.UBER_SECRET }}
-      - name: Test notification
-        env:
-          SLACK_WEBHOOK_URL: http://localhost/
-        uses: sudoorgza/simple-slack-notify@07c61b7004365fc1f6ea433d2a772f3e546c105d
-        with:
-          channel: '#build'
-          status: ${{ job.status }}
-          success_text: 'ok'
+      # - name: Test notification
+      #   env:
+      #     SLACK_WEBHOOK_URL: http://localhost/
+      #   uses: sudoorgza/simple-slack-notify@07c61b7004365fc1f6ea433d2a772f3e546c105d
+      #   with:
+      #     channel: '#build'
+      #     status: ${{ job.status }}
+      #     success_text: 'ok'
 
   foo:
     needs: test
@@ -86,16 +86,16 @@ jobs:
       - name: Pull tests
         uses: actions/checkout@v3
 
-      - name: Non-push build only
-        uses: docker/build-push-action@v4
-        with:
-          push: false
-          load: true
-          context: client
-          file: client/docker/Dockerfile
-          builder: ${{ steps.buildx_setup.outputs.name }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          tags: testag
+      # - name: Non-push build only
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     push: false
+      #     load: true
+      #     context: client
+      #     file: client/docker/Dockerfile
+      #     builder: ${{ steps.buildx_setup.outputs.name }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     tags: testag
 
 
