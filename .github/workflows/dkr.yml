@@ -49,19 +49,19 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - run: echo {{ needs.test.outputs.test_out }}
+      - run: echo ${{ needs.test.outputs.test_out }}
 
   bar:
     needs: foo
     runs-on: ubuntu-latest
     steps:
-      - run: echo {{ needs.test.outputs.test_out }}
+      - run: echo ${{ needs.test.outputs.test_out }}
 
   baz:
     needs: [foo,test]
     runs-on: ubuntu-latest
     steps:
-      - run: echo {{ needs.test.outputs.test_out }}
+      - run: echo ${{ needs.test.outputs.test_out }}
 
   build:
     runs-on: ubuntu-latest
